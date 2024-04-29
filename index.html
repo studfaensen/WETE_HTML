@@ -24,16 +24,6 @@
     </table>
 </div>
 
-<tr>
-    <td>{{ row.id }}</td>
-    <td>{{ row.name }}</td>
-    <td>{{ row.age }}</td>
-    <td>
-        <button hx-delete="/deleteRow/{{ row.id }}" onclick="deleteRow({{ row.id }})">Delete</button>
-        <button onclick="editRow({{ row.id }})">Edit</button>
-    </td>
-</tr>
-
 
 <script>
 function deleteRow(id) {
