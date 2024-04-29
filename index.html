@@ -24,16 +24,33 @@
 </div>
 
 <script>
-function deleteRow(id) {
-
-}
-
-function editRow(id) {
-
-}
-
 function addRow() {
+    // Create a new row element
+    var newRow = document.createElement('tr');
 
+    // Add cells to the new row
+    var idCell = document.createElement('td');
+    idCell.textContent = 'New ID'; // You can set the ID dynamically
+    newRow.appendChild(idCell);
+
+    var nameCell = document.createElement('td');
+    nameCell.textContent = 'New Name'; // You can set the Name dynamically
+    newRow.appendChild(nameCell);
+
+    var ageCell = document.createElement('td');
+    ageCell.textContent = 'New Age'; // You can set the Age dynamically
+    newRow.appendChild(ageCell);
+
+    var actionsCell = document.createElement('td');
+    var deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.setAttribute('onclick', 'deleteRow(this)');
+    actionsCell.appendChild(deleteButton);
+    newRow.appendChild(actionsCell);
+
+    // Append the new row to the table body
+    var tableBody = document.querySelector('#tableContainer table tbody');
+    tableBody.appendChild(newRow);
 }
 </script>
 
