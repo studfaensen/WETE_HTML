@@ -18,6 +18,13 @@
     <button onclick="addRecord()">Add New Record</button>
 </div>
 
+<!-- Edit Modal -->
+<div id="edit-modal" style="display: none;">
+    <h2>Edit Record</h2>
+    <input type="text" id="edit-name" placeholder="Name">
+    <button onclick="updateRecord()">Save</button>
+</div>
+
 <script>
     // Simulated data
     var records = [
@@ -43,7 +50,7 @@
             tableHtml += '<td>' + record.id + '</td>';
             tableHtml += '<td>' + record.name + '</td>';
             tableHtml += '<td><button hx-post="/delete" hx-target="#table-container" hx-swap="outerHTML" hx-confirm="Are you sure you want to delete this record?" hx-params="id=' + record.id + '">Delete</button>';
-            tableHtml += '<button hx-get="/edit?id=' + record.id + '" hx-target="#edit-form" hx-swap="outerHTML">Edit</button></td>';
+            tableHtml += '<button onclick="openEditModal(' + record.id + ')">Edit</button></td>';
             tableHtml += '</tr>';
         });
         tableHtml += '</table>';
@@ -66,15 +73,40 @@
     // Initial table generation
     loadPage(0);
 
+    // Function to open edit modal
+    function openEditModal(id) {
+        var record = records.find(function (r) {
+            return r.id === id;
+        });
+        document.getElementById('edit-name').value = record.name;
+        document.getElementById('edit-modal').style.display = 'block';
+        document.getElementById('edit-modal').setAttribute('data-record-id', id);
+    }
+
+    // Function to update record
+    function updateRecord() {
+        var id = document.getElementById('edit-modal').getAttribute('data-record-id');
+        var newName = document.getElementById('edit-name').value;
+        var recordIndex = records.findIndex(function (r) {
+            return r.id == id;
+        });
+        if (recordIndex > -1) {
+            records[recordIndex].name = newName;
+            loadPage(0); // Reload current page
+            closeEditModal();
+        }
+    }
+
+    // Function to close edit modal
+    function closeEditModal() {
+        document.getElementById('edit-modal').style.display = 'none';
+    }
+
     // Function to add a new record
     function addRecord() {
         // Implement functionality to add a new record
     }
 </script>
-
-<div id="edit-form">
-    <!-- Edit form will be dynamically loaded here -->
-</div>
 
 </body>
 </html>
