@@ -1,111 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTMX Table Pagination Example</title>
-    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Table</title>
+<script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
 </head>
 <body>
 
-<div id="table-container">
-    <!-- Table will be dynamically generated here -->
-</div>
-
-<div>
-    <button onclick="loadPage(-1)">Previous</button>
-    <button onclick="loadPage(1)">Next</button>
-    <button onclick="addRecord()">Add New Record</button>
-</div>
-
-<!-- Edit Modal -->
-<div id="edit-modal" style="display: none;">
-    <h2>Edit Record</h2>
-    <input type="text" id="edit-name" placeholder="Name">
-    <button onclick="updateRecord()">Save</button>
+<div id="tableContainer">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody hx-target="#tableContainer" hx-get="/getTable?page=1">
+            <!-- Table content will be loaded here dynamically -->
+        </tbody>
+    </table>
 </div>
 
 <script>
-    // Simulated data
-    var records = [
-        {id: 1, name: "Record 1"},
-        {id: 2, name: "Record 2"},
-        {id: 3, name: "Record 3"},
-        {id: 4, name: "Record 4"},
-        {id: 5, name: "Record 5"},
-        {id: 6, name: "Record 6"},
-        {id: 7, name: "Record 7"},
-        {id: 8, name: "Record 8"},
-        {id: 9, name: "Record 9"},
-        {id: 10, name: "Record 10"},
-        // Add more records as needed
-    ];
+function deleteRow(id) {
+    // You can implement your delete logic here
+    console.log("Delete row with id:", id);
+}
 
-    // Function to generate table rows
-    function generateTable(data) {
-        var tableHtml = '<table>';
-        tableHtml += '<tr><th>ID</th><th>Name</th><th>Actions</th></tr>';
-        data.forEach(function (record) {
-            tableHtml += '<tr>';
-            tableHtml += '<td>' + record.id + '</td>';
-            tableHtml += '<td>' + record.name + '</td>';
-            tableHtml += '<td><button hx-post="/delete" hx-target="#table-container" hx-swap="outerHTML" hx-confirm="Are you sure you want to delete this record?" hx-params="id=' + record.id + '">Delete</button>';
-            tableHtml += '<button onclick="openEditModal(' + record.id + ')">Edit</button></td>';
-            tableHtml += '</tr>';
-        });
-        tableHtml += '</table>';
-        return tableHtml;
-    }
+function editRow(id) {
+    // You can implement your edit logic here
+    console.log("Edit row with id:", id);
+}
 
-    // Pagination
-    var pageSize = 5; // Number of records per page
-    var currentPage = 0;
-
-    function loadPage(direction) {
-        var totalPages = Math.ceil(records.length / pageSize);
-        currentPage = Math.min(Math.max(currentPage + direction, 0), totalPages - 1);
-        var start = currentPage * pageSize;
-        var end = start + pageSize;
-        var pageRecords = records.slice(start, end);
-        document.getElementById('table-container').innerHTML = generateTable(pageRecords);
-    }
-
-    // Initial table generation
-    loadPage(0);
-
-    // Function to open edit modal
-    function openEditModal(id) {
-        var record = records.find(function (r) {
-            return r.id === id;
-        });
-        document.getElementById('edit-name').value = record.name;
-        document.getElementById('edit-modal').style.display = 'block';
-        document.getElementById('edit-modal').setAttribute('data-record-id', id);
-    }
-
-    // Function to update record
-    function updateRecord() {
-        var id = document.getElementById('edit-modal').getAttribute('data-record-id');
-        var newName = document.getElementById('edit-name').value;
-        var recordIndex = records.findIndex(function (r) {
-            return r.id == id;
-        });
-        if (recordIndex > -1) {
-            records[recordIndex].name = newName;
-            loadPage(0); // Reload current page
-            closeEditModal();
-        }
-    }
-
-    // Function to close edit modal
-    function closeEditModal() {
-        document.getElementById('edit-modal').style.display = 'none';
-    }
-
-    // Function to add a new record
-    function addRecord() {
-        // Implement functionality to add a new record
-    }
+function addRow() {
+    // You can implement your add logic here
+    console.log("Adding new row...");
+}
 </script>
 
 </body>
